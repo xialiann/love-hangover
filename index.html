@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Будешь ли ты моей Валентинкой?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  padding:0;
+  font-family:'Montserrat',sans-serif;
+  background:linear-gradient(135deg,#1e1e2f,#3a1c71,#d76d77,#ffaf7b);
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  text-align:center;
+}
+
+/* --- START SCREEN --- */
+.start-screen{
+  position:absolute;
+}
+
+.bunny{
+  font-size:70px;
+}
+
+button{
+  padding:10px 20px;
+  margin:10px;
+  border:none;
+  border-radius:25px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.yes{background:#ff6f91;color:white;}
+.no{background:white;color:#e75480;}
+
+/* --- ENVELOPE --- */
+.envelope{
+  display:none;
+  position:relative;
+  width:340px;
+  height:240px;
+  background:white;
+  border-radius:10px;
+  cursor:pointer;
+  box-shadow:0 15px 40px rgba(0,0,0,0.4);
+  overflow:hidden;
+}
+
+.flap{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#ff6f91;
+  clip-path:polygon(0 0,100% 0,50% 55%);
+  transition:0.8s;
+}
+
+.letter{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:white;
+  color:#333;
+  padding:20px;
+  box-sizing:border-box;
+  transform:translateY(100%);
+  transition:0.8s;
+  overflow:hidden;
+}
+
+.open .flap{transform:rotateX(180deg);}
+.open .letter{transform:translateY(0);}
+
+/* --- PAGES --- */
+.page{
+  display:none;
+  animation:fade 1.5s;
+}
+
+.page.active{display:block;}
+
+@keyframes fade{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+.next-btn{
+  margin-top:15px;
+  background:#e75480;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="start-screen" id="start">
+  <div class="bunny">🐰❤️</div>
+  <h2>Будешь ли ты моей Валентинкой?</h2>
+  <button class="yes" onclick="accept()">Да</button>
+  <button class="no" onclick="beg()">Нет</button>
+  <p id="begText"></p>
+</div>
+
+<div class="envelope" id="envelope" onclick="openCard()">
+  <div class="flap"></div>
+  <div class="letter">
+
+    <div class="page active">
+      <h3>Шонаш ❤️ Мадин</h3>
+      <p>
+        Иногда любовь — это не громкие слова.<br>
+        Это тихое присутствие.<br>
+        Это перерывы между общением.<br>
+        Это страх потерять…<br>
+        и счастье быть рядом.
+      </p>
+      <button class="next-btn" onclick="nextPage(event)">Дальше →</button>
+    </div>
+
+    <div class="page">
+      <p>
+        Я не обещаю идеальности.<br>
+        Я обещаю быть рядом.<br>
+        Даже когда трудно.<br>
+        Даже когда молчим.<br>
+        Даже когда мир против нас.
+      </p>
+      <button class="next-btn" onclick="nextPage(event)">Дальше →</button>
+    </div>
+
+    <div class="page">
+      <p>
+        Если когда-нибудь тебе станет грустно —<br>
+        вспомни, что в этом мире есть человек,<br>
+        который выбирает тебя.<br>
+        Каждый день.<br>
+        Снова и снова.
+      </p>
+      <button class="next-btn" onclick="nextPage(event)">Дальше →</button>
+    </div>
+
+    <div class="page">
+      <p>
+        И если ты сейчас улыбаешься сквозь слёзы —<br>
+        значит, всё было не зря.<br>
+        Спасибо, что ты есть.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<audio id="music" loop>
+  
+  <source src="donmek.mp3" type="audio/mp3">
+</audio>
+
+<script>
+let begs=["Пожалуйста...","Ну пожалуйста 🥺","Подумай ещё раз...","Я буду самой счастливой...","Ну не нажимай нет..."];
+let begIndex=0;
+
+function beg(){
+  document.getElementById("begText").innerText=begs[begIndex];
+  begIndex=(begIndex+1)%begs.length;
+}
+
+function accept(){
+  document.getElementById("start").style.display="none";
+  document.getElementById("envelope").style.display="block";
+  document.getElementById("music").play();
+}
+
+function openCard(){
+  document.getElementById("envelope").classList.toggle("open");
+}
+
+function nextPage(e){
+  e.stopPropagation();
+  let pages=document.querySelectorAll(".page");
+  for(let i=0;i<pages.length;i++){
+    if(pages[i].classList.contains("active")){
+      pages[i].classList.remove("active");
+      if(pages[i+1]) pages[i+1].classList.add("active");
+      break;
+    }
+  }
+}
+</script>
+
+</body>
+</html>
